@@ -24,7 +24,7 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import { User } from "better-auth";
 import { signOut } from "@/lib/auth-client";
 
-export const SidebarFooter = ({ user }: { user: User }) => {
+export const SidebarFooter = ({ user }: { user?: User | null }) => {
   const isMobile = useIsMobile();
   const router = useRouter();
   const { theme, setTheme } = useTheme();

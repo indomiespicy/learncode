@@ -3,7 +3,10 @@ import { inferAdditionalFields } from "better-auth/client/plugins";
 import { LocalAuth } from "./types";
 
 const authClient = createAuthClient({
-  baseURL: process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3001",
+  baseURL:
+    typeof window === "undefined"
+      ? process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001"
+      : process.env.NEXT_PUBLIC_APP_URL || undefined,
   plugins: [inferAdditionalFields<LocalAuth>()],
 });
 

@@ -39,10 +39,11 @@ export const LoginForm = () => {
 
   useEffect(() => {
     if (session.data && !session.isPending) {
+      if (reason) return;
       const isAdmin = session.data.user.role === "admin";
-      router.replace(isAdmin ? "/admin" : "/learn");
+      router.push(isAdmin ? "/admin" : "/learn");
     }
-  }, [session.data, session.isPending, router]);
+  }, [session.data, session.isPending, router, reason]);
 
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),

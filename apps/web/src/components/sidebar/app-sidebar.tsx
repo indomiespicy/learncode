@@ -4,7 +4,7 @@ import { SidebarFooter } from "./sidebar-footer";
 import { User } from "better-auth";
 import { SidebarHeader } from "./sidebar-header";
 
-export async function AppSidebar({ user }: { user: User }) {
+export async function AppSidebar({ user }: { user?: User | null }) {
   return (
     <Sidebar variant="inset" collapsible="icon">
       <SidebarHeader />

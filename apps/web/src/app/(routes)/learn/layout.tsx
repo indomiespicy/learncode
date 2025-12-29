@@ -16,11 +16,12 @@ const DashboardLayout = async ({ children }: { children: React.ReactNode }) => {
   });
 
   if (!session.data?.user) {
-    redirect("/login");
+    redirect("/login?reason=unauthorized");
   }
+
   return (
     <SidebarProvider>
-      <AppSidebar user={session.data.user} />
+      <AppSidebar user={session.data?.user} />
       <SidebarInset>
         <SidebarTrigger />
         {children}

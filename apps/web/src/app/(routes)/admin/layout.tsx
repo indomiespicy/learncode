@@ -16,13 +16,14 @@ const AdminDashboardLayout = async ({
     },
   });
 
-  if (session.data?.user.role !== "admin") {
-    redirect("/login");
+  if (!session.data?.user || session.data.user.role !== "admin") {
+    redirect("/login?reason=unauthorized");
   }
+
   return (
     <>
       <SidebarProvider>
-        <AppSidebar user={session.data.user} />
+        <AppSidebar user={session.data?.user} />
         <SidebarInset>
           {/* layout */}
           <Navbar />
