@@ -5,6 +5,7 @@ import { ModuleCard } from "@/components/cards/module-card";
 import { LayoutTitle } from "@/components/layout/title";
 
 import { courseBySlugOptions } from "@/lib/api";
+import { ModuleWithLessons } from "@/lib/types";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 
@@ -39,7 +40,7 @@ const EditCoursePage = () => {
       {/* course card */}
       <CourseEditCard course={course} />
       {/* module card */}
-      {modules.map((item) => (
+      {modules.map((item: ModuleWithLessons) => (
         <ModuleCard course={course} key={item.id} module={item} />
       ))}
     </div>

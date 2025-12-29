@@ -11,7 +11,9 @@ const AuthLayout = async ({ children }: { children: React.ReactNode }) => {
   });
 
   if (session?.data) {
-    redirect("/learn");
+    // Redirect based on user role
+    const isAdmin = session.data.user.role === "admin";
+    redirect(isAdmin ? "/admin" : "/learn");
   }
   return children;
 };

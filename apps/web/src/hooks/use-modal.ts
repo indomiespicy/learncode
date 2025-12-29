@@ -4,7 +4,7 @@ import {
   Lesson,
   Module,
   TestCase,
-} from "../../../backend/generated/prisma/client";
+} from "../lib/types";
 
 interface createState {
   isOpen: boolean;

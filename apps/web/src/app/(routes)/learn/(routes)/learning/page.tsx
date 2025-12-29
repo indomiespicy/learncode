@@ -9,7 +9,7 @@ import { useCreateBlockNote } from "@blocknote/react";
 import { BlockNoteView } from "@blocknote/shadcn";
 import "@blocknote/shadcn/style.css";
 import { useState, useMemo } from "react";
-import { SubmissionStatus } from "../../../../../../../backend/generated/prisma/enums";
+import { SubmissionStatus } from "@/lib/types";
 
 // Types
 type TestCase = {

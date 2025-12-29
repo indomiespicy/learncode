@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/card";
 import { useModuleModal } from "@/hooks/use-modal";
 import { PlusCircleIcon } from "lucide-react";
-import { Course } from "../../../../backend/generated/prisma/client";
+import { Course } from "../../lib/types";
 
 export const CourseEditCard = ({ course }: { course: Course }) => {
   const { onOpen: onOpenModule } = useModuleModal();

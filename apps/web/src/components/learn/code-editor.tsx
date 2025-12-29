@@ -5,7 +5,7 @@ import Editor from "@monaco-editor/react";
 import { Button } from "../ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Badge } from "../ui/badge";
-import { SubmissionStatus } from "../../../../backend/generated/prisma/enums";
+import { SubmissionStatus } from "../../lib/types";
 
 interface CodeEditorProps {
   initialCode: string;

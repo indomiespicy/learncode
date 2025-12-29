@@ -66,7 +66,6 @@ export const auth = betterAuth({
     },
   },
   baseURL: process.env.BETTER_AUTH_URL,
-
   socialProviders: {
     google: {
       clientId: process.env.GOOGLE_CLIENT_ID as string,
@@ -74,5 +73,8 @@ export const auth = betterAuth({
       redirectURI: `${process.env.BETTER_AUTH_URL}/api/auth/callback/google`,
     },
   },
-  trustedOrigins: ['http://localhost:3000'],
+  trustedOrigins: [
+    process.env.FRONTEND_URL ?? 'http://localhost:3000',
+    'http://localhost:3000', // Keep for local development
+  ].filter(Boolean), // Remove any undefined values,
 });

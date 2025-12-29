@@ -1,5 +1,5 @@
 import { Controller, useForm } from "react-hook-form";
-import { TestCase } from "../../../../backend/generated/prisma/client";
+import { TestCase } from "../../lib/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { testCaseFormSchema } from "@/lib/zod-schema";
 import z from "zod";

@@ -1,5 +1,5 @@
 import { Edit, Eye, EyeOff } from "lucide-react";
-import { TestCase, Lesson } from "../../../../backend/generated/prisma/client";
+import { TestCase, Lesson } from "@/lib/types";
 import { DeleteButton } from "../buttons/delete-button";
 import { Card, CardContent } from "../ui/card";
 import { useConfirm } from "@/hooks/use-confirm";

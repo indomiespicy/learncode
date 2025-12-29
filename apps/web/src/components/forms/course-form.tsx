@@ -20,7 +20,7 @@ import { courseFormSchema } from "@/lib/zod-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm, useWatch } from "react-hook-form";
 import { z } from "zod";
-import { Course } from "../../../../backend/generated/prisma/client";
+import { Course } from "../../lib/types";
 import { useEffect } from "react";
 import { slugify } from "@/lib/utils";
 

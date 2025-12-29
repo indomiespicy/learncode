@@ -1,10 +1,10 @@
 import { createAuthClient } from "better-auth/react";
 import { inferAdditionalFields } from "better-auth/client/plugins";
-import type { auth } from "../../../backend/src/auth";
+import { LocalAuth } from "./types";
 
 const authClient = createAuthClient({
   baseURL: process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3001",
-  plugins: [inferAdditionalFields<typeof auth>()],
+  plugins: [inferAdditionalFields<LocalAuth>()],
 });
 
 export const {

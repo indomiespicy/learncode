@@ -1,7 +1,7 @@
 import { Code2, Edit, Eye, EyeOff, GripVertical, Plus } from "lucide-react";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { Lesson, TestCase } from "../../../../backend/generated/prisma/client";
+import { Lesson, TestCase } from "../../lib/types";
 import { DeleteButton } from "../buttons/delete-button";
 import { UpdateButton } from "../buttons/update-button";
 import {

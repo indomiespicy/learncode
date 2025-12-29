@@ -1,7 +1,4 @@
-import {
-  CourseCategory,
-  Difficulty,
-} from "@/../../backend/generated/prisma/enums";
+import { CourseCategory, Difficulty } from "./types";
 import z from "zod";
 
 export const courseFormSchema = z.object({

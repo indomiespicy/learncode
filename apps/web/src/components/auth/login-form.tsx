@@ -14,7 +14,7 @@ import {
 } from "../ui/field";
 import { Input } from "../ui/input";
 import { signIn, useSession } from "@/lib/auth-client";
-import { redirect, useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Button } from "../ui/button";
 import { Loader2 } from "lucide-react";
 import { useEffect } from "react";
@@ -38,11 +38,11 @@ export const LoginForm = () => {
   }, [reason]);
 
   useEffect(() => {
-    if (session.data) {
+    if (session.data && !session.isPending) {
       const isAdmin = session.data.user.role === "admin";
-      router.push(isAdmin ? "/admin" : "/learn");
+      router.replace(isAdmin ? "/admin" : "/learn");
     }
-  }, [session.data, router]);
+  }, [session.data, session.isPending, router]);
 
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
@@ -68,8 +68,6 @@ export const LoginForm = () => {
       return;
     }
     toast.success("Login berhasil!");
-
-    if (session.data?.user) redirect("/learn");
   };
 
   return (

@@ -1,5 +1,5 @@
 import { queryOptions } from "@tanstack/react-query";
-import { Module } from "../../../backend/generated/prisma/client";
+import { Module } from "./types";
 import { CourseWithModulesAndLessons, CourseWithModulesCount } from "./types";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3001";

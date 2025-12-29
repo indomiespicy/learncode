@@ -12,7 +12,7 @@ import {
   FieldSet,
 } from "../ui/field";
 import { Input } from "../ui/input";
-import { Module } from "../../../../backend/generated/prisma/client";
+import { Module } from "../../lib/types";
 import { useEffect } from "react";
 import { slugify } from "@/lib/utils";
 

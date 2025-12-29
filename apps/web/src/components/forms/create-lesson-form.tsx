@@ -4,7 +4,7 @@ import { lessonFormSchema } from "@/lib/zod-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm, useWatch } from "react-hook-form";
 import z from "zod";
-import { Lesson } from "../../../../backend/generated/prisma/client";
+import { Lesson } from "../../lib/types";
 import { Field, FieldError, FieldGroup, FieldLabel } from "../ui/field";
 import { Input } from "../ui/input";
 
