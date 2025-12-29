@@ -1,0 +1,297 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider     = "prisma-client"
+  output       = "../generated/prisma"
+  moduleFormat = "cjs"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id            String  @id
+  name          String
+  email         String
+  emailVerified Boolean
+  image         String?
+
+  createdAt DateTime
+  updatedAt DateTime
+
+  // relation
+  sessions       Session[]
+  accounts       Account[]
+  userProgress   UserProgress[]
+  lessonProgress LessonProgress[]
+  submissions    UserSubmission[]
+
+  banned     Boolean?  @default(false)
+  banReason  String?
+  banExpires DateTime?
+
+  role String?
+
+  @@unique([email])
+  @@map("user")
+}
+
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  token     String
+  createdAt DateTime
+  updatedAt DateTime
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  impersonatedBy String?
+
+  @@unique([token])
+  @@index([userId])
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime
+  updatedAt             DateTime
+
+  @@index([userId])
+  @@map("account")
+}
+
+model Verification {
+  id         String    @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime?
+  updatedAt  DateTime?
+
+  @@index([identifier])
+  @@map("verification")
+}
+
+enum Difficulty {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+}
+
+enum CourseCategory {
+  WEB_DEVELOPMENT
+  PROGRAMMING_LANGUAGE
+  DATA_SCIENCE
+  MOBILE_DEVELOPMENT
+  DEVOPS
+}
+
+// TODO: fix order logic
+model Course {
+  id         String         @id @default(uuid())
+  name       String
+  slug       String
+  about      String
+  order      Int            @default(autoincrement())
+  difficulty Difficulty
+  category   CourseCategory
+
+  // relation
+  modules      Module[]
+  userProgress UserProgress[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([slug])
+  @@map("course")
+}
+
+model Module {
+  id    String @id @default(uuid())
+  name  String
+  slug  String
+  order Int    @default(autoincrement())
+
+  lessons   Lesson[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // relation 
+  courseId String
+  course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@unique([courseId, slug])
+  @@map("module")
+}
+
+model Lesson {
+  id        String     @id @default(uuid())
+  name      String
+  slug      String
+  content   String?    @db.Text
+  order     Int?       @default(autoincrement())
+  testCases TestCase[]
+  // estimated completed time
+  // estimatedDuration Int
+
+  // execise 
+  instructions String? @db.Text
+  startedCode  String? @db.Text
+  solution     String? @db.Text
+  language     String? @default("javascript")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // relation
+  moduleId String
+  module   Module @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+
+  submissions    UserSubmission[]
+  lessonProgress LessonProgress[]
+
+  @@unique([moduleId, slug])
+  @@map("lesson")
+}
+
+// model testCase untuk judgeapi
+// TODO: change content to json maybe
+
+model TestCase {
+  id             String  @id @default(uuid())
+  input          String  @db.Text
+  expectedOutput String  @db.Text
+  isHidden       Boolean @default(false)
+  order          Int     @default(autoincrement())
+
+  lessonId String
+  lessons  Lesson @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+
+  @@map("test_case")
+}
+
+enum LessonStatus {
+  NOT_STARTED
+  IN_PROGRESS
+  COMPLETED
+}
+
+enum SubmissionStatus {
+  PENDING
+  RUNNING
+  ACCEPTED
+  WRONG_ANSWER
+  TIME_LIMIT_EXCEEDED
+  MEMORY_LIMIT_EXCEEDED
+  RUNTIME_ERROR
+  COMPILE_ERROR
+}
+
+//  model userProgress
+model UserProgress {
+  id         String @id @default(uuid())
+  percentage Int    @default(0)
+
+  // continue lesson feature
+  currentLessonId String?
+  completedAt     DateTime?
+
+  // time stamps
+  enrolledAt     DateTime @default(now())
+  lastAccessedAt DateTime @default(now())
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // relation
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  courseId String
+  course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, courseId])
+  @@index([userId])
+  @@index([courseId])
+  @@map("user_progress")
+}
+
+// model lessonProgress
+model LessonProgress {
+  id           String       @id @default(uuid())
+  lessonStatus LessonStatus @default(NOT_STARTED)
+
+  startedAt   DateTime?
+  completedAt DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // relation 
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  lessonId String
+  lesson   Lesson @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, lessonId])
+  @@index([userId])
+  @@index([lessonId])
+  @@map("lesson_progress")
+}
+
+// model userSubmission
+model UserSubmission {
+  id String @id @default(uuid())
+
+  // submitted code
+  code     String @db.Text
+  language String @default("javascript")
+
+  // judge0 result status
+  status SubmissionStatus @default(PENDING)
+
+  // test result
+  passedTests Int @default(0)
+  totalTests  Int @default(0)
+
+  // judge0 execution output
+  stdout         String? @db.Text
+  stderr         String? @db.Text
+  compiledOutput String? @db.Text
+  time           Float? // execution time in second
+  memory         Int? // memory used in kb
+
+  createdAt DateTime @default(now())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  lessonId String
+  lesson   Lesson @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([lessonId])
+  @@index([createdAt])
+  @@map("user_submission")
+}
